@@ -7,6 +7,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.ApplicationServices;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Revit_glTF_Exporter
 {
@@ -32,6 +34,8 @@ namespace Revit_glTF_Exporter
                 UIDocument uiDoc = uiApp.ActiveUIDocument;
                 Application app = uiApp.Application;
                 Document doc = uiDoc.Document;
+
+                View3D view = doc.ActiveView as View3D;
 
                 //Check Revit Version
                 if (!commandData.Application.Application.VersionName.Contains("2018"))
@@ -67,13 +71,11 @@ namespace Revit_glTF_Exporter
                 List<Element> fixedObjects = wallCollector.Concat(floorCollector).ToList();
                 List<Element> movableObjects = furnitureCollector;
 
-                //You can see a list of BuiltinCategories for revit:
-                //https://www.revitapidocs.com/2019/ba1c5b30-242f-5fdc-8ea9-ec3b61e6e722.htm
 
-                Settings settings = new Settings(movableObjects, fixedObjects);
+                Settings settings = new Settings(doc, view, movableObjects, fixedObjects);
                 settings.ShowDialog();
-                
-                    return Result.Succeeded;
+
+                return Result.Succeeded;
             }
             catch (Exception ex)
             {
@@ -81,5 +83,6 @@ namespace Revit_glTF_Exporter
                 return Result.Failed;
             }
         }
+        
     }
 }

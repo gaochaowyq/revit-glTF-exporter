@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Revit_glTF_Exporter"
              mc:Ignorable="d" Width="331.45" Title="glTF Exporter Settings" Height="695.233">
     <Grid Background="#FFE8E8E8">
-        <Button Content="Export" Margin="10,560,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Button_Click" FontWeight="Bold" Background="#FFA9F1DD" Height="40" VerticalAlignment="Top"/>
+        <Button Content="Export" Margin="10,560,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Export" FontWeight="Bold" Background="#FFA9F1DD" Height="40" VerticalAlignment="Top"/>
         <Label Content="Export Options" VerticalAlignment="Top" Margin="10,10,10,0"/>
         <Label Content="3D View to export" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" Width="170"/>
         <Button Content="Cancel" Margin="10,608,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Button_Click" Background="White" Height="40" VerticalAlignment="Top"/>
