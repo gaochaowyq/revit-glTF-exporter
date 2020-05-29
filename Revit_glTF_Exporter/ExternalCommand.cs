@@ -37,18 +37,21 @@ namespace Revit_glTF_Exporter
                 Document doc = uiDoc.Document;
 
                 View3D view = doc.ActiveView as View3D;
+                List<View> views = new FilteredElementCollector(doc)
+                           .OfClass(typeof(View))
+                           .ToElements()
+                           .Cast<View>()
+                           .ToList();
 
-                //Check Revit Version
-                if (!commandData.Application.Application.VersionName.Contains("2018"))
+                View template1 = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
+                View template2 = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+
+                bool v1 = views.Any(x=> x.ViewName == "MovableElements" && x.ViewName == "FixedElements" && x.IsTemplate == true);
+
+                if (!v1)
                 {
-                    using (TaskDialog taskDialog = new TaskDialog("Cannot Continue"))
-                    {
-                        taskDialog.TitleAutoPrefix = false;
-                        taskDialog.MainInstruction = "Incompatible Version of Revit";
-                        taskDialog.MainContent = "This addin just works on Revit 2018";
-                        taskDialog.Show();
-                    }
-                    return Result.Cancelled;
+                    TaskDialog.Show("View Templates", "Please charge the correct View Templates");
+                    return Result.Failed;
                 }
 
                 List<Element> wallCollector = new FilteredElementCollector(doc)
@@ -86,7 +89,6 @@ namespace Revit_glTF_Exporter
                     fixedObjects.ObjectsList.Add(fixedObject);
                 }
 
-
                 MovableObjects movableObjects = new MovableObjects();
 
                 foreach (Element element in movableObjectsCollector)
@@ -100,10 +102,6 @@ namespace Revit_glTF_Exporter
                     //movableObject.Location = element.Location;
                     movableObjects.ObjectsList.Add(movableObject);
                 }
-
-
-
-
 
                 Settings settings = new Settings(doc, view, fixedObjects, movableObjects);
                 settings.ShowDialog();
