@@ -4,20 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Revit_glTF_Exporter"
-             mc:Ignorable="d" Width="331.45" Title="glTF Exporter Settings" Height="695.233">
+             mc:Ignorable="d" Width="331.45" Title="glTF Exporter Settings" Height="741.9">
     <Grid Background="#FFE8E8E8">
-        <Button Content="Export" Margin="10,560,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Export" FontWeight="Bold" Background="#FFA9F1DD" Height="40" VerticalAlignment="Top"/>
+        <Button Content="Export Fixed Elements" Margin="10,604,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="ExportFixedElements" FontWeight="Bold" Background="#FFA9F1DD" Height="40" VerticalAlignment="Top"/>
         <Label Content="Export Options" VerticalAlignment="Top" Margin="10,10,10,0"/>
         <Label Content="3D View to export" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,41,0,0" Width="170"/>
-        <Button Content="Cancel" Margin="10,608,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Button_Click" Background="White" Height="40" VerticalAlignment="Top"/>
+        <Button Content="Cancel" Margin="10,649,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="Button_Click" Background="White" Height="40" VerticalAlignment="Top"/>
         <Label Content="Fixed Object Categories" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,317,0,0" Width="170"/>
         <Grid Height="164" Margin="10,144,10,0" VerticalAlignment="Top">
             <ListView x:Name ="movableObjects">
                 <ListView.View>
                     <GridView x:Name="movableObjectsGridView">
                         <GridViewColumn DisplayMemberBinding="{Binding Category}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding EId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -25,14 +24,14 @@
                 <ListView.View>
                     <GridView x:Name="fixedObjectsGridView">
                         <GridViewColumn DisplayMemberBinding="{Binding Category}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding EId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
         </Grid>
-            <Label Content="Movable Object Categories" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,113,0,0" Width="170"/>
+        <Label Content="Movable Object Categories" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,113,0,0" Width="170"/>
         <ComboBox VerticalAlignment="Top" Margin="10,67,10,0"/>
+        <Button Content="Export Movable Elements" Margin="10,559,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="ExportMovableElements" FontWeight="Bold" Background="#FFF1DDA9" Height="40" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

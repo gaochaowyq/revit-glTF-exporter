@@ -9,6 +9,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.ApplicationServices;
 using Microsoft.Win32;
 using System.IO;
+using Revit_glTF_Exporter.Model;
 
 namespace Revit_glTF_Exporter
 {
@@ -68,11 +69,43 @@ namespace Revit_glTF_Exporter
                                         .ToElements()
                                         .ToList();
 
-                List<Element> fixedObjects = wallCollector.Concat(floorCollector).ToList();
-                List<Element> movableObjects = furnitureCollector;
+                List<Element> fixedObjectsCollector = wallCollector.Concat(floorCollector).ToList();
+                List<Element> movableObjectsCollector = furnitureCollector;
+
+                FixedObjects fixedObjects = new FixedObjects();
+
+                foreach (Element element in fixedObjectsCollector)
+                {
+                    FixedObject fixedObject = new FixedObject();
+                    fixedObject.Category = element.Category;
+                    fixedObject.EId = element.Id;
+                    fixedObject.ElementName = element.Name;
+                    //FamilyInstance fam = element as FamilyInstance; 
+                    //fixedObject.FamilySymbol = fam.Symbol.Name;
+                    //fixedObject.Location = element.Location;
+                    fixedObjects.ObjectsList.Add(fixedObject);
+                }
 
 
-                Settings settings = new Settings(doc, view, movableObjects, fixedObjects);
+                MovableObjects movableObjects = new MovableObjects();
+
+                foreach (Element element in movableObjectsCollector)
+                {
+                    MovableObject movableObject = new MovableObject();
+                    movableObject.Category = element.Category;
+                    movableObject.EId = element.Id;
+                    movableObject.ElementName = element.Name;
+                    //FamilyInstance fam = element as FamilyInstance;
+                    //movableObject.FamilySymbol = fam.Symbol.Name;
+                    //movableObject.Location = element.Location;
+                    movableObjects.ObjectsList.Add(movableObject);
+                }
+
+
+
+
+
+                Settings settings = new Settings(doc, view, fixedObjects, movableObjects);
                 settings.ShowDialog();
 
                 return Result.Succeeded;

@@ -7,12 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace Revit_glTF_Exporter.Model
 {
-    public interface IObject
+    public interface IObjects<T>
     {
+        List<T> ObjectsList { get; set; }
+        int Count { get; set; }
         Category Category { get; set; }
-        string FamilySymbol { get; set; }
-        string ElementName { get; set; }
-        ElementId EId { get; set; }
-        Location Location { get; set; }
     }
 }

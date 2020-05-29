@@ -7,13 +7,13 @@ using Autodesk.Revit.DB;
 
 namespace Revit_glTF_Exporter.Model
 {
-    public class MovableObjects
+    public class FixedObjects
     {
-        public List<MovableObject> ObjectsList { get; set; }
+        public List<FixedObject> ObjectsList { get; set; }
 
-        public MovableObjects()
+        public FixedObjects()
         {
-            ObjectsList = new List<MovableObject>();
+            ObjectsList = new List<FixedObject>();
         }
 
         public int Count
@@ -24,6 +24,7 @@ namespace Revit_glTF_Exporter.Model
                 this.Count = ObjectsList.Count();
             }
         }
+
         public Category Category
         {
             get { return Category; }
@@ -32,6 +33,5 @@ namespace Revit_glTF_Exporter.Model
                 this.Category = ObjectsList.FirstOrDefault().Category;
             }
         }
-
     }
 }
