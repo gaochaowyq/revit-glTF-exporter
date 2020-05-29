@@ -108,6 +108,7 @@
     <Compile Include="glTF.cs" />
     <Compile Include="GlTFExportContext.cs" />
     <Compile Include="Model\FixedObject.cs" />
+    <Compile Include="Model\IObject.cs" />
     <Compile Include="Model\MovableObject.cs" />
     <Compile Include="Model\MovableObjects.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -7,12 +7,12 @@ using Autodesk.Revit.DB;
 
 namespace Revit_glTF_Exporter.Model
 {
-    class MovableObject
+    class MovableObject : IObject
     {
-        Category Category { get; set; }
-        FamilySymbol FamilySymbol { get; set; }
-        string ElementName { get; set; }
-        ElementId ElementId { get; set; }
-        XYZ Location { get; set; }
+        public Category Category { get; set; }
+        public FamilySymbol FamilySymbol { get; set; }
+        public string ElementName { get; set ; }
+        public ElementId ElementId { get; set; }
+        public XYZ Location { get; set; }
     }
 }

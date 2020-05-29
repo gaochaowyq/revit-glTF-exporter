@@ -32,7 +32,5 @@ namespace Revit_glTF_Exporter.Model
 
 
 
-
-
     }
 }
