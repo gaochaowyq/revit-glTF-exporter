@@ -15,23 +15,25 @@
             <ListView x:Name ="movableObjects">
                 <ListView.View>
                     <GridView x:Name="movableObjectsGridView">
-                        <GridViewColumn DisplayMemberBinding="{Binding Category}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding EId}"/>
+                        <GridViewColumn Header="Cateogry" DisplayMemberBinding="{Binding Category.Name}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ElementName}"/>
+                        <GridViewColumn Header ="ID" DisplayMemberBinding="{Binding EId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
             <ListView x:Name ="fixedObjects" Margin="0,202,0,-202">
                 <ListView.View>
                     <GridView x:Name="fixedObjectsGridView">
-                        <GridViewColumn DisplayMemberBinding="{Binding Category}"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding EId}"/>
+                        <GridViewColumn Header="Cateogry" DisplayMemberBinding="{Binding Category.Name}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ElementName}"/>
+                        <GridViewColumn Header ="ID" DisplayMemberBinding="{Binding EId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
         </Grid>
         <Label Content="Movable Object Categories" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="9,113,0,0" Width="170"/>
-        <ComboBox VerticalAlignment="Top" Margin="10,67,10,0"/>
-        <Button Content="Export Movable Elements" Margin="10,559,10,0" Foreground="Black" BorderBrush="{x:Null}" Click="ExportMovableElements" FontWeight="Bold" Background="#FFF1DDA9" Height="40" VerticalAlignment="Top"/>
+        <ComboBox VerticalAlignment="Top" Margin="10,67,10,0" SelectionChanged="ComboBox_SelectionChanged"/>
+        <Button Content="Export Movable Elements" Margin="10,559,10,0" Foreground="White" BorderBrush="{x:Null}"  Click="ExportMovableElements" FontWeight="Bold" Background="#FF7559F3" Height="40" VerticalAlignment="Top" />
 
     </Grid>
 </Window>

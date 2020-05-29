@@ -144,5 +144,10 @@ namespace Revit_glTF_Exporter
         {
             this.Close();
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
