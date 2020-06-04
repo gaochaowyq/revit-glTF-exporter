@@ -43,10 +43,14 @@ namespace Revit_glTF_Exporter
                            .Cast<View>()
                            .ToList();
 
-                View template1 = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
-                View template2 = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+                //View template1 = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
+                //View template2 = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
 
-                bool v1 = views.Any(x=> x.ViewName == "MovableElements" && x.ViewName == "FixedElements" && x.IsTemplate == true);
+                View template1 = views.Where(x => (x.Name == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
+                View template2 = views.Where(x => (x.Name == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+
+                //bool v1 = views.Any(x=> x.ViewName == "MovableElements" || x.ViewName == "FixedElements" && x.IsTemplate == true);
+                bool v1 = views.Any(x => x.Name == "MovableElements" || x.Name == "FixedElements" && x.IsTemplate == true);
 
                 if (!v1)
                 {

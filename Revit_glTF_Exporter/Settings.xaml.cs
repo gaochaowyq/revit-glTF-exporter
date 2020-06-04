@@ -48,8 +48,13 @@ namespace Revit_glTF_Exporter
                             .Cast<View>()
                             .ToList();
 
-            _templateMovableElements = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate== true)).FirstOrDefault();
-            _templateFixedElements = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+            //_templateMovableElements = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate== true)).FirstOrDefault();
+            //_templateFixedElements = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+
+
+            _templateMovableElements = views.Where(x => (x.Name == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
+            _templateFixedElements = views.Where(x => (x.Name == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+
 
             _templates.Add(_templateMovableElements);
             _templates.Add(_templateFixedElements);
