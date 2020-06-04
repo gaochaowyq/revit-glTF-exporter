@@ -22,7 +22,7 @@ namespace Revit_glTF_Exporter
         {
             RibbonControl ribbon = ComponentManager.Ribbon;
             RibbonTab tab = ribbon.FindTab(ribbonTabName);
-
+            
             if (tab == null)
                 application.CreateRibbonTab(ribbonTabName);
 
