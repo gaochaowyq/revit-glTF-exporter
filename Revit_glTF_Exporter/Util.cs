@@ -229,7 +229,6 @@ namespace Revit_glTF_Exporter
 
             List<string> dependentElementUuids = new List<string>();
 
-            string uuid;
             Document doc = e.Document;
 
             foreach (ElementId elId in dependentElements)
@@ -237,8 +236,11 @@ namespace Revit_glTF_Exporter
                 if (elId != e.Id)
                 {
                     Element dependentElement = doc.GetElement(elId);
-                    uuid = dependentElement.LookupParameter("Project UUID")?.AsString();
-                    dependentElementUuids.Add(uuid);
+                    string uuid = dependentElement.LookupParameter("ProjectUUID")?.AsString();
+                    if (uuid != null)
+                    {
+                        dependentElementUuids.Add(uuid);
+                    }
                 }
             }
 
