@@ -176,7 +176,7 @@ namespace Revit_glTF_Exporter
                 grid.length = length;
                 xtras.GridParameters = grid;
                 xtras.UniqueId = g.UniqueId;
-                xtras.Properties = Util.GetElementProperties(g, true);
+                xtras.parameters = Util.GetElementParameters(g, true);
 
                 var gridNode = new glTFNode();
                 gridNode.name = g.Name;
@@ -300,7 +300,10 @@ namespace Revit_glTF_Exporter
                 // get the extras for this element
                 glTFExtras extras = new glTFExtras();
                 extras.UniqueId = e.UniqueId;
-                extras.Properties = Util.GetElementProperties(e, true);
+                extras.parameters = Util.GetElementParameters(e, true);
+                extras.elementId = e.Id.IntegerValue;
+                extras.elementCategory = e.Category.Name;
+                extras.dependentElements = Util.GetDependentElements(e);
                 newNode.extras = extras;
 
                 Nodes.AddOrUpdateCurrent(e.UniqueId, newNode);

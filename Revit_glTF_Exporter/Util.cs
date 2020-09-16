@@ -218,12 +218,42 @@ namespace Revit_glTF_Exporter
         }
 
         /// <summary>
+        /// Gets a list of "Project UUID" values corresponding to 
+        /// an element's dependent (hosted) elements
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public static List<string> GetDependentElements(Element e)
+        {
+            IList<ElementId> dependentElements = e.GetDependentElements(null);
+
+            List<string> dependentElementUuids = new List<string>();
+
+            Document doc = e.Document;
+
+            foreach (ElementId elId in dependentElements)
+            {
+                if (elId != e.Id)
+                {
+                    Element dependentElement = doc.GetElement(elId);
+                    string uuid = dependentElement.LookupParameter("ProjectUUID")?.AsString();
+                    if (uuid != null)
+                    {
+                        dependentElementUuids.Add(uuid);
+                    }
+                }
+            }
+
+            return dependentElementUuids;
+        }
+
+        /// <summary>
         /// From Jeremy Tammik's RvtVa3c exporter:
         /// https://github.com/va3c/RvtVa3c
         /// Return a dictionary of all the given 
         /// element parameter names and values.
         /// </summary>
-        public static Dictionary<string, string> GetElementProperties(Element e, bool includeType)
+        public static Dictionary<string, string> GetElementParameters(Element e, bool includeType)
         {
             IList<Parameter> parameters
               = e.GetOrderedParameters();
@@ -231,7 +261,7 @@ namespace Revit_glTF_Exporter
             Dictionary<string, string> a = new Dictionary<string, string>(parameters.Count);
 
             // Add element category
-            a.Add("Element Category", e.Category.Name);
+            //a.Add("Element Category", e.Category.Name);
 
             string key;
             string val;
