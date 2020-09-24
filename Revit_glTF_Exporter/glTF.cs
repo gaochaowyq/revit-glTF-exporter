@@ -53,7 +53,7 @@ namespace Revit_glTF_Exporter
     {
         public List<float> vertexBuffer { get; set; } = new List<float>();
         public List<int> indexBuffer { get; set; } = new List<int>();
-        public List<int> batchIdBuffer { get; set; } = new List<int>();
+        public List<float> batchIdBuffer { get; set; } = new List<float>();
         //public List<float> normalBuffer { get; set; } = new List<float>();
         public int vertexAccessorIndex { get; set; }
         public int indexAccessorIndex { get; set; }

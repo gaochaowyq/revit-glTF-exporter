@@ -228,9 +228,10 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((int)index);
                             }
-                            foreach (var index in bin.batchIdBuffer)
+                            foreach (var batchId in bin.batchIdBuffer)
                             {
-                                writer.Write((int)index);
+                                float val = (float)batchId;
+                                writer.Write(val);
                             }
                         }
                     }
@@ -270,9 +271,9 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((int)index);
                             }
-                            foreach (var index in bin.batchIdBuffer)
+                            foreach (var batchId in bin.batchIdBuffer)
                             {
-                                writer.Write((int)index);
+                                writer.Write((float)batchId);
                             }
                         }
                     }
@@ -553,7 +554,7 @@ namespace Revit_glTF_Exporter
             // Get max and min for index data
             int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
             // Get max and min for batchId data
-            int[] batchIdMinMax = Util.GetScalarMinMax(bufferData.batchIdBuffer);
+            float[] batchIdMinMax = Util.GetScalarMinMax(bufferData.batchIdBuffer);
             // TODO: Uncomment for normals
             // Get max and min for normal data
             //float[] normalMinMax = getVec3MinMax(bufferData.normalBuffer);
@@ -647,7 +648,7 @@ namespace Revit_glTF_Exporter
             glTFAccessor batchIdAccessor = new glTFAccessor();
             batchIdAccessor.bufferView = batchIdsViewIdx;
             batchIdAccessor.byteOffset = 0;
-            batchIdAccessor.componentType = ComponentType.UNSIGNED_INT;
+            batchIdAccessor.componentType = ComponentType.FLOAT;
             batchIdAccessor.count = numIndexes;
             batchIdAccessor.type = "SCALAR";
             batchIdAccessor.max = new List<float>() { batchIdMinMax[1] };

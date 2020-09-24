@@ -89,6 +89,21 @@ namespace Revit_glTF_Exporter
             return new int[] { minFaceIndex, maxFaceIndex };
         }
 
+        public static float[] GetScalarMinMax(List<float> scalars)
+        {
+            float minFaceIndex = float.MaxValue;
+            float maxFaceIndex = float.MinValue;
+            for (int i = 0; i < scalars.Count; i++)
+            {
+                float currentMin = Math.Min(minFaceIndex, scalars[i]);
+                if (currentMin < minFaceIndex) minFaceIndex = currentMin;
+
+                float currentMax = Math.Max(maxFaceIndex, scalars[i]);
+                if (currentMax > maxFaceIndex) maxFaceIndex = currentMax;
+            }
+            return new float[] { minFaceIndex, maxFaceIndex };
+        }
+
         /// <summary>
         /// From Jeremy Tammik's RvtVa3c exporter:
         /// https://github.com/va3c/RvtVa3c
