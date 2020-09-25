@@ -223,7 +223,10 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((float)coord);
                             }
-                            // TODO: add writer for normals buffer
+                            //foreach (var normal in bin.normalBuffer)
+                            //{
+                            //    writer.Write((float)normal);
+                            //}
                             foreach (var index in bin.indexBuffer)
                             {
                                 writer.Write((int)index);
@@ -266,7 +269,10 @@ namespace Revit_glTF_Exporter
                             {
                                 writer.Write((float)coord);
                             }
-                            // TODO: add writer for normals buffer
+                            //foreach (var normal in bin.normalBuffer)
+                            //{
+                            //    writer.Write((float)normal);
+                            //}
                             foreach (var index in bin.indexBuffer)
                             {
                                 writer.Write((int)index);
@@ -393,19 +399,23 @@ namespace Revit_glTF_Exporter
             _currentVertices.AddOrUpdateCurrent(vertex_key, new VertexLookupInt());
 
             // Populate current geometry normals data
-            IList<XYZ> norms = polymesh.GetNormals();
-            foreach (XYZ norm in norms)
-            {
-                _currentGeometry.CurrentItem.normals.Add(norm.X);
-                _currentGeometry.CurrentItem.normals.Add(norm.Y);
-                _currentGeometry.CurrentItem.normals.Add(norm.Z);
-            }
+            //if (polymesh.DistributionOfNormals == DistributionOfNormals.AtEachPoint)
+            //{
+            //    IList<XYZ> norms = polymesh.GetNormals();
+            //    foreach (XYZ norm in norms)
+            //    {
+            //        _currentGeometry.CurrentItem.normals.Add(norm.X);
+            //        _currentGeometry.CurrentItem.normals.Add(norm.Y);
+            //        _currentGeometry.CurrentItem.normals.Add(norm.Z);
+            //    }
+            //}
 
             // populate current vertices vertex data and current geometry faces data
             Transform t = CurrentTransform;
             IList<XYZ> pts = polymesh.GetPoints();
             pts = pts.Select(p => t.OfPoint(p)).ToList();
-            foreach (PolymeshFacet facet in polymesh.GetFacets())
+            IList<PolymeshFacet> facets = polymesh.GetFacets();
+            foreach (PolymeshFacet facet in facets)
             {
                 int v1 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V1], _flipCoords));
                 int v2 = _currentVertices.CurrentItem.AddVertex(new PointInt(pts[facet.V2], _flipCoords));
@@ -414,6 +424,19 @@ namespace Revit_glTF_Exporter
                 _currentGeometry.CurrentItem.faces.Add(v1);
                 _currentGeometry.CurrentItem.faces.Add(v2);
                 _currentGeometry.CurrentItem.faces.Add(v3);
+
+                //if (polymesh.DistributionOfNormals == DistributionOfNormals.OnePerFace)
+                //{
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).X);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Y);
+                //    _currentGeometry.CurrentItem.normals.Add(polymesh.GetNormal(0).Z);
+                //}
             }
         }
 
@@ -471,10 +494,10 @@ namespace Revit_glTF_Exporter
 
                 glTFMeshPrimitive primitive = new glTFMeshPrimitive();
                 primitive.attributes.POSITION = elementBinary.vertexAccessorIndex;
+                //primitive.attributes.NORMAL = elementBinary.normalsAccessorIndex;
                 primitive.attributes._BATCHID = elementBinary.batchIdAccessorIndex;
                 primitive.indices = elementBinary.indexAccessorIndex;
                 primitive.material = Materials.GetIndexFromUUID(material_key);
-                // TODO: Add normal here
 
                 Meshes.CurrentItem.primitives.Add(primitive);
             }
@@ -535,6 +558,10 @@ namespace Revit_glTF_Exporter
                 float vFloat = Convert.ToSingle(coord);
                 bufferData.vertexBuffer.Add(vFloat);
             }
+            //foreach (var normal in geomData.normals)
+            //{
+            //    bufferData.normalBuffer.Add((float)normal);
+            //}
             foreach (var index in geomData.faces)
             {
                 bufferData.indexBuffer.Add(index);
@@ -543,21 +570,15 @@ namespace Revit_glTF_Exporter
             {
                 bufferData.batchIdBuffer.Add(elementId);
             }
-            // TODO: Uncomment for normals
-            //foreach (var normal in geomData.normals)
-            //{
-            //    bufferData.normalBuffer.Add((float)normal);
-            //}
 
             // Get max and min for vertex data
             float[] vertexMinMax = Util.GetVec3MinMax(bufferData.vertexBuffer);
+            // Get max and min for normal data
+            //float[] normalMinMax = Util.GetVec3MinMax(bufferData.normalBuffer);
             // Get max and min for index data
             int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
             // Get max and min for batchId data
             float[] batchIdMinMax = Util.GetScalarMinMax(bufferData.batchIdBuffer);
-            // TODO: Uncomment for normals
-            // Get max and min for normal data
-            //float[] normalMinMax = getVec3MinMax(bufferData.normalBuffer);
 
             /**
              * BufferViews
@@ -576,7 +597,19 @@ namespace Revit_glTF_Exporter
             BufferViews.Add(vec3View);
             int vec3ViewIdx = BufferViews.Count - 1;
 
-            // TODO: Add a normals (vec3) buffer view
+            // Add a normals (vec3) buffer view
+            //int elementsPerNormal = 3;
+            //int bytesPerNormalElement = 4;
+            //int bytesPerNormal = elementsPerNormal * bytesPerNormalElement;
+            //int numVec3Normals = (geomData.normals.Count) / elementsPerNormal;
+            //int sizeOfVec3ViewNormals = numVec3Normals * bytesPerNormal;
+            //glTFBufferView vec3ViewNormals = new glTFBufferView();
+            //vec3ViewNormals.buffer = bufferIdx;
+            //vec3ViewNormals.byteOffset = vec3View.byteLength;
+            //vec3ViewNormals.byteLength = sizeOfVec3ViewNormals;
+            //vec3ViewNormals.target = Targets.ELEMENT_ARRAY_BUFFER;
+            //BufferViews.Add(vec3ViewNormals);
+            //int vec3ViewNormalsIdx = BufferViews.Count - 1;
 
             // Add a faces / indexes buffer view
             int elementsPerIndex = 1;
@@ -587,11 +620,13 @@ namespace Revit_glTF_Exporter
             glTFBufferView facesView = new glTFBufferView();
             facesView.buffer = bufferIdx;
             facesView.byteOffset = vec3View.byteLength;
+            //facesView.byteOffset = vec3ViewNormals.byteOffset + vec3ViewNormals.byteLength;
             facesView.byteLength = sizeOfIndexView;
             facesView.target = Targets.ELEMENT_ARRAY_BUFFER;
             BufferViews.Add(facesView);
             int facesViewIdx = BufferViews.Count - 1;
 
+            // Add a batchId buffer view
             glTFBufferView batchIdsView = new glTFBufferView();
             batchIdsView.buffer = bufferIdx;
             batchIdsView.byteOffset = facesView.byteOffset + facesView.byteLength;
@@ -600,6 +635,7 @@ namespace Revit_glTF_Exporter
             BufferViews.Add(batchIdsView);
             int batchIdsViewIdx = BufferViews.Count - 1;
 
+            //Buffers[bufferIdx].byteLength = vec3View.byteLength + vec3ViewNormals.byteLength + facesView.byteLength + batchIdsView.byteLength;
             Buffers[bufferIdx].byteLength = vec3View.byteLength + facesView.byteLength + batchIdsView.byteLength;
 
             /**
@@ -618,18 +654,18 @@ namespace Revit_glTF_Exporter
             Accessors.Add(positionAccessor);
             bufferData.vertexAccessorIndex = Accessors.Count - 1;
 
-            // TODO: Uncomment for normals
-            // add a normals accessor
+            //add a normals accessor
             //glTFAccessor normalsAccessor = new glTFAccessor();
-            //normalsAccessor.bufferView = vec3ViewIdx;
-            //normalsAccessor.byteOffset = (positionAccessor.count) * bytesPerVertex;
+            //normalsAccessor.bufferView = vec3ViewNormalsIdx;
+            //normalsAccessor.byteOffset = 0;
             //normalsAccessor.componentType = ComponentType.FLOAT;
-            //normalsAccessor.count = geom.data.normals.Count / elementsPerVertex;
+            //normalsAccessor.count = geomData.normals.Count / elementsPerNormal;
             //normalsAccessor.type = "VEC3";
             //normalsAccessor.max = new List<float>() { normalMinMax[1], normalMinMax[3], normalMinMax[5] };
             //normalsAccessor.min = new List<float>() { normalMinMax[0], normalMinMax[2], normalMinMax[4] };
-            //this.accessors.Add(normalsAccessor);
-            //bufferData.normalsAccessorIndex = this.accessors.Count - 1;
+            //normalsAccessor.name = "NORMALS";
+            //Accessors.Add(normalsAccessor);
+            //bufferData.normalsAccessorIndex = Accessors.Count - 1;
 
             // add a face accessor
             glTFAccessor faceAccessor = new glTFAccessor();

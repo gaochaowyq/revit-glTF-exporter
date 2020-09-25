@@ -52,13 +52,13 @@ namespace Revit_glTF_Exporter
     public class glTFBinaryData
     {
         public List<float> vertexBuffer { get; set; } = new List<float>();
+        //public List<float> normalBuffer { get; set; } = new List<float>();
         public List<int> indexBuffer { get; set; } = new List<int>();
         public List<float> batchIdBuffer { get; set; } = new List<float>();
-        //public List<float> normalBuffer { get; set; } = new List<float>();
         public int vertexAccessorIndex { get; set; }
+        //public int normalsAccessorIndex { get; set; }
         public int indexAccessorIndex { get; set; }
         public int batchIdAccessorIndex { get; set; }
-        //public int normalsAccessorIndex { get; set; }
         public string name { get; set; }
     }
 
