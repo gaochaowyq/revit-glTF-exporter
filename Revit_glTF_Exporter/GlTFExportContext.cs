@@ -233,8 +233,7 @@ namespace Revit_glTF_Exporter
                             }
                             foreach (var batchId in bin.batchIdBuffer)
                             {
-                                float val = (float)batchId;
-                                writer.Write(val);
+                                writer.Write((float)batchId);
                             }
                         }
                     }
@@ -345,6 +344,8 @@ namespace Revit_glTF_Exporter
             string matName;
             ElementId id = node.MaterialId;
             glTFMaterial gl_mat = new glTFMaterial();
+            float opacity = 1 - (float)node.Transparency;
+
             if (id != ElementId.InvalidElementId)
             {
                 // construct a material from the node
@@ -354,7 +355,7 @@ namespace Revit_glTF_Exporter
                 // construct the material
                 gl_mat.name = matName;
                 glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, 1f };
+                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
                 pbr.metallicFactor = 0f;
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
@@ -369,10 +370,10 @@ namespace Revit_glTF_Exporter
                 string uuid = Guid.NewGuid().ToString();
 
                 // construct the material
-                matName = string.Format("MaterialNode_{0}_{1}", Util.ColorToInt(node.Color), Util.RealString(node.Transparency * 100));
+                matName = string.Format("MaterialNode_{0}_{1}", Util.ColorToInt(node.Color), Util.RealString(opacity * 100));
                 gl_mat.name = matName;
                 glTFPBR pbr = new glTFPBR();
-                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, 1f };
+                pbr.baseColorFactor = new List<float>() { node.Color.Red / 255f, node.Color.Green / 255f, node.Color.Blue / 255f, opacity };
                 pbr.metallicFactor = 0f;
                 pbr.roughnessFactor = 1f;
                 gl_mat.pbrMetallicRoughness = pbr;
@@ -566,7 +567,7 @@ namespace Revit_glTF_Exporter
             {
                 bufferData.indexBuffer.Add(index);
             }
-            foreach (var index in geomData.faces)
+            foreach (var coord in geomData.vertices)
             {
                 bufferData.batchIdBuffer.Add(elementId);
             }
@@ -578,7 +579,7 @@ namespace Revit_glTF_Exporter
             // Get max and min for index data
             int[] faceMinMax = Util.GetScalarMinMax(bufferData.indexBuffer);
             // Get max and min for batchId data
-            float[] batchIdMinMax = Util.GetScalarMinMax(bufferData.batchIdBuffer);
+            float[] batchIdMinMax = Util.GetVec3MinMax(bufferData.batchIdBuffer);
 
             /**
              * BufferViews
@@ -630,8 +631,8 @@ namespace Revit_glTF_Exporter
             glTFBufferView batchIdsView = new glTFBufferView();
             batchIdsView.buffer = bufferIdx;
             batchIdsView.byteOffset = facesView.byteOffset + facesView.byteLength;
-            batchIdsView.byteLength = sizeOfIndexView;
-            batchIdsView.target = Targets.ELEMENT_ARRAY_BUFFER;
+            batchIdsView.byteLength = sizeOfVec3View;
+            batchIdsView.target = Targets.ARRAY_BUFFER;
             BufferViews.Add(batchIdsView);
             int batchIdsViewIdx = BufferViews.Count - 1;
 
@@ -672,7 +673,8 @@ namespace Revit_glTF_Exporter
             faceAccessor.bufferView = facesViewIdx;
             faceAccessor.byteOffset = 0;
             faceAccessor.componentType = ComponentType.UNSIGNED_INT;
-            faceAccessor.count = numIndexes;
+            //faceAccessor.count = numIndexes;
+            faceAccessor.count = geomData.faces.Count / elementsPerIndex;
             faceAccessor.type = "SCALAR";
             faceAccessor.max = new List<float>() { faceMinMax[1] };
             faceAccessor.min = new List<float>() { faceMinMax[0] };
@@ -685,10 +687,13 @@ namespace Revit_glTF_Exporter
             batchIdAccessor.bufferView = batchIdsViewIdx;
             batchIdAccessor.byteOffset = 0;
             batchIdAccessor.componentType = ComponentType.FLOAT;
-            batchIdAccessor.count = numIndexes;
-            batchIdAccessor.type = "SCALAR";
-            batchIdAccessor.max = new List<float>() { batchIdMinMax[1] };
-            batchIdAccessor.min = new List<float>() { batchIdMinMax[0] };
+            //batchIdAccessor.count = numIndexes;
+            batchIdAccessor.count = geomData.vertices.Count / elementsPerVertex;
+            batchIdAccessor.type = "VEC3";
+            //batchIdAccessor.max = new List<float>() { batchIdMinMax[1] };
+            //batchIdAccessor.min = new List<float>() { batchIdMinMax[0] };
+            batchIdAccessor.max = new List<float>() { batchIdMinMax[1], batchIdMinMax[3], batchIdMinMax[5] };
+            batchIdAccessor.min = new List<float>() { batchIdMinMax[0], batchIdMinMax[2], batchIdMinMax[4] };
             batchIdAccessor.name = "BATCH_ID";
             Accessors.Add(batchIdAccessor);
             bufferData.batchIdAccessorIndex = Accessors.Count - 1;
