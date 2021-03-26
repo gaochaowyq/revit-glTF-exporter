@@ -29,77 +29,32 @@ namespace Revit_glTF_Exporter
     {
         Document _doc;
         View3D _view;
-        ElementId _CurrentTemplateId;
-        View _templateMovableElements;
-        View _templateFixedElements;
-        List<View> _templates;
-        public Settings(Document doc, View3D view, FixedObjects _fixedObjects, MovableObjects _movableObjects)
+        string _fileName;
+        string _viewName;
+        public Settings(Document doc, View3D view)
         {
             InitializeComponent();
 
             this._doc = doc;
             this._view = view;
-            this._templates = new List<View>();
-
-
-            List<View> views = new FilteredElementCollector(doc)
-                            .OfClass(typeof(View))
-                            .ToElements()
-                            .Cast<View>()
-                            .ToList();
+            this._fileName = _doc.Title;
 #if REVIT2019 || REVIT2020 || REVIT2021
-            _templateMovableElements = views.Where(x => (x.Name == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
-            _templateFixedElements = views.Where(x => (x.Name == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+            this._viewName = _view.Name;
 #else
-            _templateMovableElements = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
-            _templateFixedElements = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
+            this._viewName = _view.ViewName;
 #endif
-
-
-
-            _templates.Add(_templateMovableElements);
-            _templates.Add(_templateFixedElements);
-
-            _CurrentTemplateId = _view.ViewTemplateId;
-
-           
-
-
-
-
-
-            fixedObjects.ItemsSource = _fixedObjects.ObjectsList;
-            movableObjects.ItemsSource = _movableObjects.ObjectsList;
         }
 
-        private void ExportMovableElements(object sender, RoutedEventArgs e)
+        private void OnExportView(object sender, RoutedEventArgs e)
         {
             if (_view == null)
             {
                 TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
+                this.Close();
             }
             SaveFileDialog fileDialog = new SaveFileDialog();
-            fileDialog.FileName = "NewProject"; // default file name
-            fileDialog.DefaultExt = ".gltf"; // default file extension
 
-            bool? dialogResult = fileDialog.ShowDialog();
-            if (dialogResult == true)
-            {
-                string filename = fileDialog.FileName;
-                string directory = System.IO.Path.GetDirectoryName(filename) + "\\";
-
-                ExportView3D(_view, filename, directory, true);
-            }
-        }
-
-        private void ExportFixedElements(object sender, RoutedEventArgs e)
-        {
-            if (_view == null)
-            {
-                TaskDialog.Show("glTFRevitExport", "You must be in a 3D view to export.");
-            }
-            SaveFileDialog fileDialog = new SaveFileDialog();
-            fileDialog.FileName = "NewProject"; // default file name
+            fileDialog.FileName = _fileName + " - " + _viewName; // default file name
             fileDialog.DefaultExt = ".gltf"; // default file extension
 
             bool? dialogResult = fileDialog.ShowDialog();
@@ -116,20 +71,7 @@ namespace Revit_glTF_Exporter
         {
 
             Document doc = view3d.Document;
-            View _template;
-            if (mode)
-                _template = _templates[0];
-            else
-                _template = _templates[1];
 
-
-            using (Transaction t = new Transaction(doc, "Transaction Name"))
-            {
-                t.Start();
-                view3d.ViewTemplateId = _template.Id;
-                t.Commit();
-            }
-                
             // Use our custom implementation of IExportContext as the exporter context.
             glTFExportContext ctx = new glTFExportContext(doc, filename , directory + "\\");
             // Create a new custom exporter with the context.
@@ -137,12 +79,6 @@ namespace Revit_glTF_Exporter
                 
             exporter.ShouldStopOnError = true;
             exporter.Export(view3d);
-            using (Transaction t = new Transaction(doc, "Transaction Name"))
-            {
-                t.Start();
-                view3d.ViewTemplateId = _CurrentTemplateId;
-                t.Commit();
-            }
             
         }
 

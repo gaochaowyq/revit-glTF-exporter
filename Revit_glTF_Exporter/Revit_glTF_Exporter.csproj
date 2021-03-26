@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2019|AnyCPU'">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>pdbonly</DebugType>
+	<Optimize>false</Optimize>
     <OutputPath>bin\R2019\</OutputPath>
     <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
   </PropertyGroup>
