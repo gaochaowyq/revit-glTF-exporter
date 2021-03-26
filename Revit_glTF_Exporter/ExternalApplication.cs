@@ -21,7 +21,7 @@ namespace Revit_glTF_Exporter
             /// <summary>
             /// Create a new Tab on Ribbon Bar.
             /// </summary>
-            const string RIBBON_TAB = "Project DELOS";
+            const string RIBBON_TAB = "glTF Exporter";
             Ribbon.CreateRibbonTab(application, RIBBON_TAB);
 
             /// <summary>
