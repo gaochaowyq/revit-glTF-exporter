@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2019|AnyCPU'">
-	<DebugSymbols>true</DebugSymbols>
-	<DebugType>pdbonly</DebugType>
-	<Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\R2019\</OutputPath>
     <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
   </PropertyGroup>
@@ -153,7 +153,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2019"</PostBuildEvent>
   </PropertyGroup>
 </Project>
