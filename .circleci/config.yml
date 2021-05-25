@@ -1,0 +1,60 @@
+version: 2.1
+
+orbs:
+    win: circleci/windows@2.2.0
+  
+workflows:
+    version: 2
+    build_and_release:
+    jobs:
+        - build:
+            filters:
+                branches:
+                    only:
+                    - circleci
+        - release:
+            filters:
+                branches:
+                    only:
+                    - circleci
+            requires:
+                - build
+
+jobs:
+    build:
+        executor:
+            name: win/default
+        steps:
+            - checkout:
+                path: C:\Users\circleci\project
+        - restore_cache:
+            keys:
+                - dotnet-packages
+        - run:
+            name: "Restore packages"
+            command: nuget restore ./Revit_glTF_Exporter.sln
+        - run:
+            name: "Run Build step"
+            command: dotnet build ./Revit_glTF_Exporter.sln -c R2019 --no-restore
+        - save_cache:
+            paths:
+                - C:\Users\circleci\project\.nuget\packages
+            key: dotnet-packages
+        - run:
+            name: "Compress artifacts"
+            command: tar -cvzf revitGltfExporter-assets.tar .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
+        - store_artifacts:
+            path: .\revitGltfExporter-assets.tar
+            destination: revitGltfExporter-assets
+
+    release:
+        docker:
+            - image: circleci/golang:1.10
+        steps:
+            - attach_workspace:
+                at: .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
+            - run:
+                name: "Publish Installer on GitHub"
+                command: |
+                    go get github.com/tcnksm/ghr
+                    ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./bin/Release/netframework/win10-x64/publish
