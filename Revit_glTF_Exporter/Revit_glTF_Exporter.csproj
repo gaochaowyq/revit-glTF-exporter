@@ -10,6 +10,7 @@
     <RootNamespace>Revit_glTF_Exporter</RootNamespace>
     <AssemblyName>Revit_glTF_Exporter</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+	<RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
