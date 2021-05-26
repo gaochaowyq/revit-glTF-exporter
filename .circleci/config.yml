@@ -6,9 +6,9 @@ orbs:
 workflows:
     version: 2
     build_and_release:
-    jobs:
-        - build
-        - release
+        jobs:
+            - build
+            - release
 
 jobs:
     build:
