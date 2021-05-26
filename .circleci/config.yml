@@ -28,7 +28,7 @@ jobs:
                 command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2019.0.1
             - run:
                 name: "Run Build step"
-                command: dotnet build ./Revit_glTF_Exporter.sln -c R2019 --no-restore
+                command: MSBuild ./Revit_glTF_Exporter.sln /property:Configuration=R2019
             - save_cache:
                 paths:
                     - C:\Users\circleci\project\.nuget\packages
