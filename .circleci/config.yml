@@ -24,7 +24,7 @@ jobs:
                 name: "Restore packages"
                 command: nuget restore ./Revit_glTF_Exporter.sln
             - run:
-                name: "Fetch Revit API DLLs"
+                name: "Update Revit API Version"
                 command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2019.0.1
             - run:
                 name: "Run Build step"
