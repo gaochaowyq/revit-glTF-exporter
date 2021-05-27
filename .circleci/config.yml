@@ -60,6 +60,6 @@ jobs:
                 name: "Publish Installer on GitHub"
                 command: |
                     go get github.com/tcnksm/ghr
-                    echo 'export TAG=$(cat .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle\PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/')' >> $BASH_ENV
+                    echo 'export TAG=$(cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/')' >> $BASH_ENV
                     source $BASH_ENV
                     ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./bin/Release/netframework/win10-x64/publish
