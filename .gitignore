@@ -262,3 +262,6 @@ __pycache__/
 
 # Built Revit Bundle files
 **/*.bundle/Contents/*/*.dll
+
+# CircleCI local testing
+process.yml

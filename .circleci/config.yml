@@ -5,10 +5,16 @@ orbs:
   
 workflows:
     version: 2
-    build_and_release:
+    main:
         jobs:
             - build
-            - release
+            - release:
+                filters:
+                    branches:
+                        only:
+                            - circleci
+                requires:
+                    - build
 
 jobs:
     build:
@@ -28,7 +34,7 @@ jobs:
                 command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2019.0.1
             - run:
                 name: "Run Build step"
-                command: MSBuild ./Revit_glTF_Exporter.sln /property:Configuration=R2019
+                command: MSBuild ./Revit_glTF_Exporter.sln -p:Configuration=R2019
             - save_cache:
                 paths:
                     - C:\Users\circleci\project\.nuget\packages
@@ -39,7 +45,6 @@ jobs:
             - store_artifacts:
                 path: .\revitGltfExporter-assets.tar
                 destination: revitGltfExporter-assets
-
     release:
         docker:
             - image: circleci/golang:1.10
@@ -50,4 +55,6 @@ jobs:
                 name: "Publish Installer on GitHub"
                 command: |
                     go get github.com/tcnksm/ghr
+                    echo 'export TAG=$(cat .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle\PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/')' >> $BASH_ENV
+                    source $BASH_ENV
                     ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./bin/Release/netframework/win10-x64/publish
