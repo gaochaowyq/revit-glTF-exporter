@@ -47,7 +47,7 @@ jobs:
                 destination: revitGltfExporter-assets
             # persist application manifest so release job can reference version
             - persist_to_workspace:
-                root: ~/Revit_glTF_Exporter/Revit-glTF-Exporter.bundle
+                root: .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
                 paths:
                     - PackageContents.xml
 
