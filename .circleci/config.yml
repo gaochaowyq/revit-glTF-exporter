@@ -45,17 +45,21 @@ jobs:
             - store_artifacts:
                 path: .\revitGltfExporter-assets.tar
                 destination: revitGltfExporter-assets
+            # persist application manifest so release job can reference version
             - persist_to_workspace:
-                root: .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
+                root: ~/Revit_glTF_Exporter/Revit-glTF-Exporter.bundle
                 paths:
                     - PackageContents.xml
 
     release:
         docker:
+            # use docker go image to leverage ghr library
             - image: circleci/golang:1.10
         steps:
+            # mount workspace from build job
             - attach_workspace:
-                at: .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
+                at: ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle
+            # publish github release with version from PackageContents.xml and stored artifact
             - run:
                 name: "Publish Installer on GitHub"
                 command: |
