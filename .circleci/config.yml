@@ -49,7 +49,7 @@ jobs:
             - run:
                 name: "Get Package Version"
                 command: |
-                    mkdir ./tmp && cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/' >> version.txt
+                    mkdir ./tmp && cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/' >> ./tmp/version.txt
             # persist application manifest so release job can reference version
             - persist_to_workspace:
                 root: ./tmp
