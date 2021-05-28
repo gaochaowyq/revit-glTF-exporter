@@ -45,7 +45,7 @@ jobs:
             - store_artifacts:
                 path: .\revitGltfExporter-assets.tar
                 destination: revitGltfExporter-assets
-            # get version from PackageContents.xml
+            # get package version from PackageContents.xml
             - run:
                 name: "Get Package Version"
                 command: |
