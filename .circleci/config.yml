@@ -45,11 +45,16 @@ jobs:
             - store_artifacts:
                 path: .\revitGltfExporter-assets.tar
                 destination: revitGltfExporter-assets
+            # get version from PackageContents.xml
+            - run:
+                name: "Get Package Version"
+                command: |
+                    cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/' >> ./tmp/version.txt
             # persist application manifest so release job can reference version
             - persist_to_workspace:
-                root: .\Revit_glTF_Exporter\Revit-glTF-Exporter.bundle
+                root: ./tmp
                 paths:
-                    - PackageContents.xml
+                    - version.txt
 
     release:
         docker:
@@ -58,12 +63,12 @@ jobs:
         steps:
             # mount workspace from build job
             - attach_workspace:
-                at: ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle
-            # publish github release with version from PackageContents.xml and stored artifact
+                at: ./tmp
+            # publish github release with PackageContents.xml version and stored artifact
             - run:
                 name: "Publish Installer on GitHub"
                 command: |
                     go get github.com/tcnksm/ghr
-                    echo 'export TAG=$(cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/')' >> $BASH_ENV
+                    echo 'export TAG=$(more ./tmp/version.txt)' >> $BASH_ENV
                     source $BASH_ENV
                     ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./bin/Release/netframework/win10-x64/publish
