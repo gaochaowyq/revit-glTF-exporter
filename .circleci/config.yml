@@ -49,10 +49,10 @@ jobs:
             - run:
                 name: "Get Package Version"
                 command: |
-                    cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/' >> ./tmp/version.txt
+                    cat ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle/PackageContents.xml | grep "AppVersion" | sed 's/.*"\(.*\)".*/\1/' >> version.txt
             # persist application manifest so release job can reference version
             - persist_to_workspace:
-                root: ./tmp
+                root: .
                 paths:
                     - version.txt
 
@@ -63,12 +63,12 @@ jobs:
         steps:
             # mount workspace from build job
             - attach_workspace:
-                at: ./tmp
+                at: .
             # publish github release with PackageContents.xml version and stored artifact
             - run:
                 name: "Publish Installer on GitHub"
                 command: |
                     go get github.com/tcnksm/ghr
-                    echo 'export TAG=$(more ./tmp/version.txt)' >> $BASH_ENV
+                    echo 'export TAG=$(more ./version.txt)' >> $BASH_ENV
                     source $BASH_ENV
                     ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./bin/Release/netframework/win10-x64/publish
