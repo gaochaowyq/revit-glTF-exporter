@@ -61,8 +61,13 @@ jobs:
                 name: "Compress artifacts"
                 command: |
                     mkdir ./tmp
-                    tar -c -f ./tmp/Revit-glTF-Exporter.bundle.zip -C ./Revit_glTF_Exporter Revit-glTF-Exporter.bundle
-                shell: bash.exe
+                    cd ./Revit_glTF_Exporter
+                    Compress-Archive Revit-glTF-Exporter.bundle ../tmp/Revit-glTF-Exporter.bundle.zip
+                shell: powershell.exe
+            - run:
+                name: "Copy package.ship"
+                command: |
+                    cp package.ship ./tmp/package.ship
             - store_artifacts:
                 path: .\Revit-glTF-Exporter.bundle.zip
                 destination: revitGltfExporter-assets
@@ -78,6 +83,7 @@ jobs:
                 paths:
                     - version.txt
                     - Revit-glTF-Exporter.bundle.zip
+                    - package.ship
 
     release:
         docker:

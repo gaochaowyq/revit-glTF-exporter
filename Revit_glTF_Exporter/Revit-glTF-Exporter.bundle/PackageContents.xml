@@ -3,7 +3,7 @@
                     AutodeskProduct="Revit" 
                     ProductType="Application" 
                     Name="Revit glTF Exporter" 
-                    AppVersion="0.0.0.3" 
+                    AppVersion="0.0.0.4" 
                     Description="Export Revit models to glTF format" 
                     Author="Voyansi" 
                     Icon="" 
@@ -13,7 +13,7 @@
                     ProductCode="" 
                     UpgradeCode="" 
                     SupportedLocales="Enu" 
-                    FriendlyVersion="0.0.0.3">
+                    FriendlyVersion="0.0.0.4">
   <Components Description="2018">
     <RuntimeRequirements OS="Win64" 
                          Platform="Revit" 
