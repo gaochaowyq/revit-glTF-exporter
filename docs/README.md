@@ -1,6 +1,8 @@
 # revit-glTF-exporter
 Export glTF files from revit.
 
+<img src="images/revit-gltf-exporter-logo.png" height="300">
+
 [![CircleCI](https://circleci.com/gh/voyansi/revit-glTF-exporter/tree/master.svg?style=svg)](https://circleci.com/gh/voyansi/revit-glTF-exporter/?branch=master)
 
 ## Details
