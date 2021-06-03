@@ -12,7 +12,7 @@ workflows:
                 filters:
                     branches:
                         only:
-                            - circleci
+                            - master
                 requires:
                     - build
 
