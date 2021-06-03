@@ -10,7 +10,7 @@
     <RootNamespace>Revit_glTF_Exporter</RootNamespace>
     <AssemblyName>Revit_glTF_Exporter</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-	<RuntimeIdentifier>win</RuntimeIdentifier>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -47,6 +47,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2020|AnyCPU'">
     <OutputPath>bin\R2020\</OutputPath>
     <DefineConstants>TRACE;DEBUG;REVIT2020</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2017|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\R2017\</OutputPath>
+    <DefineConstants>REVIT2018</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -125,7 +133,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "R2018" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2018"
+    <PostBuildEvent>if "$(ConfigurationName)" == "R2017" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2017"
+if "$(ConfigurationName)" == "R2018" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2018"
 if "$(ConfigurationName)" == "R2019" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2019"
 if "$(ConfigurationName)" == "R2020" copy "$(TargetDir)" "$(ProjectDir)Revit-glTF-Exporter.bundle\Contents\2020"</PostBuildEvent>
   </PropertyGroup>

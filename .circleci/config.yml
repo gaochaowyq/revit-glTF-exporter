@@ -31,10 +31,28 @@ jobs:
                 command: nuget restore ./Revit_glTF_Exporter.sln
             - run:
                 name: "Update Revit API Version"
+                command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2017.0.2
+            - run:
+                name: "Run Build step"
+                command: MSBuild ./Revit_glTF_Exporter.sln -p:Configuration=R2017
+            - run:
+                name: "Update Revit API Version"
+                command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2018.0.2
+            - run:
+                name: "Run Build step"
+                command: MSBuild ./Revit_glTF_Exporter.sln -p:Configuration=R2018
+            - run:
+                name: "Update Revit API Version"
                 command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2019.0.1
             - run:
                 name: "Run Build step"
                 command: MSBuild ./Revit_glTF_Exporter.sln -p:Configuration=R2019
+            - run:
+                name: "Update Revit API Version"
+                command: dotnet add Revit_glTF_Exporter package Revit_All_Main_Versions_API_x64 --version 2020.0.1
+            - run:
+                name: "Run Build step"
+                command: MSBuild ./Revit_glTF_Exporter.sln -p:Configuration=R2020
             - save_cache:
                 paths:
                     - C:\Users\circleci\project\.nuget\packages
@@ -74,8 +92,6 @@ jobs:
                 name: "Publish Installer on GitHub"
                 command: |
                     go get github.com/tcnksm/ghr
-                    ls ./tmp
                     echo 'export TAG=$(more ./tmp/version.txt)' >> $BASH_ENV
                     source $BASH_ENV
-                    echo ${TAG}
                     ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./tmp
