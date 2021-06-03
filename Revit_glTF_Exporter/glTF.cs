@@ -52,11 +52,13 @@ namespace Revit_glTF_Exporter
     public class glTFBinaryData
     {
         public List<float> vertexBuffer { get; set; } = new List<float>();
-        public List<int> indexBuffer { get; set; } = new List<int>();
         //public List<float> normalBuffer { get; set; } = new List<float>();
+        public List<int> indexBuffer { get; set; } = new List<int>();
+        public List<float> batchIdBuffer { get; set; } = new List<float>();
         public int vertexAccessorIndex { get; set; }
-        public int indexAccessorIndex { get; set; }
         //public int normalsAccessorIndex { get; set; }
+        public int indexAccessorIndex { get; set; }
+        public int batchIdAccessorIndex { get; set; }
         public string name { get; set; }
     }
 
@@ -154,6 +156,7 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public int POSITION { get; set; }
         //public int NORMAL { get; set; }
+        public int _BATCHID { get; set; }
     }
 
     /// <summary>
@@ -247,7 +250,11 @@ namespace Revit_glTF_Exporter
         /// </summary>
         public string UniqueId { get; set; }
         public GridParameters GridParameters { get; set; }
-        public Dictionary<string, string> Properties { get; set; }
+        public Dictionary<string, string> parameters { get; set; }
+        public int elementId { get; set; }
+        public string elementCategory { get; set; }
+        public List<string> dependentElements { get; set; }
+
     }
 
     public class GridParameters

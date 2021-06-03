@@ -37,73 +37,8 @@ namespace Revit_glTF_Exporter
                 Document doc = uiDoc.Document;
 
                 View3D view = doc.ActiveView as View3D;
-                List<View> views = new FilteredElementCollector(doc)
-                           .OfClass(typeof(View))
-                           .ToElements()
-                           .Cast<View>()
-                           .ToList();
 
-                View template1 = views.Where(x => (x.ViewName == "MovableElements" && x.IsTemplate == true)).FirstOrDefault();
-                View template2 = views.Where(x => (x.ViewName == "FixedElements" && x.IsTemplate == true)).FirstOrDefault();
-
-                bool v1 = views.Any(x=> x.ViewName == "MovableElements" && x.ViewName == "FixedElements" && x.IsTemplate == true);
-
-                if (!v1)
-                {
-                    TaskDialog.Show("View Templates", "Please charge the correct View Templates");
-                    return Result.Failed;
-                }
-
-                List<Element> wallCollector = new FilteredElementCollector(doc)
-                                        .OfCategory(BuiltInCategory.OST_Walls)
-                                        .WhereElementIsNotElementType()
-                                        .ToElements()
-                                        .ToList();
-
-                List<Element> floorCollector = new FilteredElementCollector(doc)
-                                        .OfCategory(BuiltInCategory.OST_Floors)
-                                        .WhereElementIsNotElementType()
-                                        .ToElements()
-                                        .ToList();
-
-                List<Element> furnitureCollector = new FilteredElementCollector(doc)
-                                        .OfCategory(BuiltInCategory.OST_Furniture)
-                                        .WhereElementIsNotElementType()
-                                        .ToElements()
-                                        .ToList();
-
-                List<Element> fixedObjectsCollector = wallCollector.Concat(floorCollector).ToList();
-                List<Element> movableObjectsCollector = furnitureCollector;
-
-                FixedObjects fixedObjects = new FixedObjects();
-
-                foreach (Element element in fixedObjectsCollector)
-                {
-                    FixedObject fixedObject = new FixedObject();
-                    fixedObject.Category = element.Category;
-                    fixedObject.EId = element.Id;
-                    fixedObject.ElementName = element.Name;
-                    //FamilyInstance fam = element as FamilyInstance; 
-                    //fixedObject.FamilySymbol = fam.Symbol.Name;
-                    //fixedObject.Location = element.Location;
-                    fixedObjects.ObjectsList.Add(fixedObject);
-                }
-
-                MovableObjects movableObjects = new MovableObjects();
-
-                foreach (Element element in movableObjectsCollector)
-                {
-                    MovableObject movableObject = new MovableObject();
-                    movableObject.Category = element.Category;
-                    movableObject.EId = element.Id;
-                    movableObject.ElementName = element.Name;
-                    //FamilyInstance fam = element as FamilyInstance;
-                    //movableObject.FamilySymbol = fam.Symbol.Name;
-                    //movableObject.Location = element.Location;
-                    movableObjects.ObjectsList.Add(movableObject);
-                }
-
-                Settings settings = new Settings(doc, view, fixedObjects, movableObjects);
+                Settings settings = new Settings(doc, view);
                 settings.ShowDialog();
 
                 return Result.Succeeded;
