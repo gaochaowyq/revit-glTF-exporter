@@ -61,10 +61,10 @@ jobs:
                 name: "Compress artifacts"
                 command: |
                     mkdir ./tmp
-                    tar -cvzf ./tmp/revitGltfExporter-assets.tar ./Revit_glTF_Exporter/Revit-glTF-Exporter.bundle
+                    tar -c -f ./tmp/Revit-glTF-Exporter.bundle.zip -C ./Revit_glTF_Exporter Revit-glTF-Exporter.bundle
                 shell: bash.exe
             - store_artifacts:
-                path: .\revitGltfExporter-assets.tar
+                path: .\Revit-glTF-Exporter.bundle.zip
                 destination: revitGltfExporter-assets
             # get package version from PackageContents.xml
             - run:
@@ -77,7 +77,7 @@ jobs:
                 root: ./tmp
                 paths:
                     - version.txt
-                    - revitGltfExporter-assets.tar
+                    - Revit-glTF-Exporter.bundle.zip
 
     release:
         docker:
@@ -94,4 +94,4 @@ jobs:
                     go get github.com/tcnksm/ghr
                     echo 'export TAG=$(more ./tmp/version.txt)' >> $BASH_ENV
                     source $BASH_ENV
-                    ghr -n "Release" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./tmp
+                    ghr -n "Revit glTF Exporter v${TAG}" -b "Description" -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${TAG} ./tmp
