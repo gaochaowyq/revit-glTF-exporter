@@ -54,7 +54,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2017|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\R2017\</OutputPath>
-    <DefineConstants>REVIT2018</DefineConstants>
+    <DefineConstants>REVIT2017</DefineConstants>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2017.0.2" Condition="'$(Configuration)' == 'R2017'" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2018.0.2" Condition="'$(Configuration)' == 'R2018'" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'R2019'" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2020.0.1" Condition="'$(Configuration)' == 'R2020'" />
@@ -128,8 +129,6 @@
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2022.0.0" Condition="'$(Configuration)' == 'R2022'" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" Condition="'$(Configuration)' == 'Release'" />
-    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" />
-    <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="2019.0.1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

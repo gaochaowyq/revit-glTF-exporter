@@ -240,6 +240,9 @@ namespace Revit_glTF_Exporter
         /// <returns></returns>
         public static List<string> GetDependentElements(Element e)
         {
+#if REVIT2017
+            return new List<string>();
+#else
             IList<ElementId> dependentElements = e.GetDependentElements(null);
 
             List<string> dependentElementUuids = new List<string>();
@@ -260,6 +263,7 @@ namespace Revit_glTF_Exporter
             }
 
             return dependentElementUuids;
+#endif
         }
 
         /// <summary>
